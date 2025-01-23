@@ -1,27 +1,21 @@
 '''
 Player.py
 The VL53_Keyboard consists of 10 VL53L0X sensors which are multiplexed and free running.
-The driver returns key values normalised to the range 0..1.0
+The driver returns key values normalised to the range 0 .. 1.0
 
 1.0 represents the max distance 0.819m. In practice fingering the keyboard should
-produce values 0..0.01
+produce values 0 .. 0.01
 
-GPIO
 
 Waveshare pico-audio
-26
-27
-28
+GP 26
+GP 27
+GP 28
 
 I2C - connection to "keyboard" via TCA9548 I2C MUX
-8 SDA
-9 SCL
-
-
-KEY CHANNEL SEL (I2C MUX)
-2 LSB
-3
-4 MSB
+GP 2 SDA
+GP 3 SCL
+GP 4 RST
 
 '''
 
