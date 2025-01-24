@@ -40,7 +40,7 @@ class Keyboard():
         for ch in range(NUM_KEYS):
             self.tsl[ch]=VL53L0X(self.mux[ch])
             self.tsl[ch].start_continuous()
-            #self.tsl[ch].measurement_timing_budget = 20000 # us faster
+            self.tsl[ch].measurement_timing_budget = 33000 # us 
             #self.tsl[ch].io_timeout_s=0.02 # 2x timing budget
 
     def __del__(self):
@@ -90,11 +90,18 @@ class Keyboard():
             
             if self.tsl[ch].data_ready:
                 norm=self.normalise(ch,self.tsl[ch].distance)
-                levels[ch]=norm
-                self.cache[ch]=norm
+                
+                # there are glitches when the output is 90% less
+                # if that happens in one pass it's a glitch
+                if norm<0.9*levels[ch]:
+                    levels[ch]=self.cache[ch]
+                else:
+                    levels[ch]=norm
+                    self.cache[ch]=norm
             else:
                 # if there's no data ready used the last reading to
                 # smooth the changes
+                print("data not ready")
                 levels[ch]=self.cache[ch]
                 
         return levels
@@ -124,14 +131,17 @@ if __name__=="__main__":
     #kbd.scanKeys()
     
     try:
+        count=0
         while True:
+            print()
             lev=kbd.getAllLevels()
             for l in lev:
                 print(l," ",end="")
             print()
             #kbd.dumpRanges()
             time.sleep(2)
-            
+            count+=1
+            print("Count",count)
     except Exception as e:
         print("EXCEPTION ",e)
         kbd.dumpRanges()
