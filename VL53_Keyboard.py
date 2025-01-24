@@ -79,7 +79,7 @@ class Keyboard():
 
         # return normalised value
         range=self.maxLevel[ch]-self.minLevel[ch]
-        return (value-self.minLevel[ch])/range
+        return round((value-self.minLevel[ch])/range,2)
         
         
     def getAllLevels(self):
