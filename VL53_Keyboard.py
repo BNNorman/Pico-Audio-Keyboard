@@ -93,7 +93,7 @@ class Keyboard():
                 
                 # there are glitches when the output is 90% less
                 # if that happens in one pass it's a glitch
-                if norm<0.9*levels[ch]:
+                if norm<0.1*levels[ch]:
                     levels[ch]=self.cache[ch]
                 else:
                     levels[ch]=norm
@@ -101,7 +101,7 @@ class Keyboard():
             else:
                 # if there's no data ready used the last reading to
                 # smooth the changes
-                print("data not ready")
+                # print("data not ready")
                 levels[ch]=self.cache[ch]
                 
         return levels
