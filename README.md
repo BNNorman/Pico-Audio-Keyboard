@@ -46,10 +46,18 @@ This program creates the 8 notes which are assigned to each key. The notes are p
 
 # Possible Extensions
 
-1 add harmonics to the generated sine waves
-2 improve the isolation of the keys currently two keys can be 'pressed' with my fat fingers.
-3 upto 7x TCA9584 can be daisy chained giving upto 7x8 notes.
+1 improve the isolation of the keys currently two keys can be 'pressed' with my fat fingers.
+2 upto 7x TCA9584 can be daisy chained giving upto 7x8 notes.
 
+# HarmonicPlayer.py
+
+Harmonics can now be added to the base notes as follows:-
+ 
+```
+HARMONICS=[1,2] # a list of harmonics to add e.g. [1,2,3,4] or [1,3,5]
+```
+
+If an empty list is provided then only the base frequency sign wave is generated
 
 
 
