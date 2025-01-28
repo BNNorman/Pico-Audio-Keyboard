@@ -59,6 +59,17 @@ HARMONICS=[1,2] # a list of harmonics to add e.g. [1,2,3,4] or [1,3,5]
 
 If an empty list is provided then only the base frequency sign wave is generated
 
+# LoopPlayer.py
+
+This bring backing loops into the mix. Keep the loops small since they can be memory hogs. The one I used was 65Kb and worked just fine. GC reported >400kb still available ( think it's lying).
+
+WAV files are better because MP3 take a lot more space. I saved the loop2.wav from audacity at 8000 sample frequency to match the generated tones.
+
+```
+LOOPS=["Music/loop2.wav"] # add all the loops you want here
+LOOP_VOL=0.2
+```
+
 
 
 
