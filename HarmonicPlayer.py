@@ -34,6 +34,7 @@ import VL53_Keyboard
 import gc
 import time
 
+# the keyboard keys are normalised
 MAX_DIST=0.1 # scale is 0..1.0 # min..max
 
 HARMONICS=[1,2] # a list of harmonics to add e.g. [1,2,3,4] or [1,3,5]
@@ -92,19 +93,15 @@ def makeHarmonicTone(midiNote,vol=1.0):
                 base_wave[p]=int((base_wave[p]+harmonic_wave[p % harmonic_len])//2)
             except Exception as e:
                 print(f"Exception {e} base {base_wave[p]} harm {harmonic_wave[p % harmonic_len]}")
-                
-    #print("BASE WAVE AFTER",type(base_wave))
-                
-    print("Type final base_wave",base_wave)
+
     
     return audiocore.RawSample(base_wave)
-    
-    
+        
     
 def makeTone(midiNote,vol=1.0):
     # create a 1 cycle note which will be played continuously
     freq=midiNoteFreq(midiNote)
-    print("makeTone",midiNote,freq)
+    print("makeTone midiNote",midiNote,"freq",freq)
     
     tone_volume = vol  # Increase this to increase the volume of the tone.
     length = int(8000/freq)
@@ -140,20 +137,23 @@ def setMidiOctave(octave):
             octaveNotes[k]=makeTone(midiNote+12*octave,1)
     
 last_keys=[]
-
+count=0
 def setKeyLevels():
     # get the distance readings from the keyboard
     # and set the mixer channel levels accordingly
     # the keyboard normalises the key value to the range 0..1.0
-    global last_keys
+    global last_keys,count
     distances=keyboard.getAllLevels()
+    
     if distances!=last_keys:
         last_keys=distances
-        print("keyboard distances",distances)
+        print(f"{count} ",distances)
+        count+=1
+        
     for k in range(keyboard.getNumKeys()):
         # key values are return in normalise values 0..1.0
-        # typical values will be 0..0.01
-        # we need to remap them to range 0 .. 1.0 for controlling volume
+        # typical values will be 0..0.01 since 1.0 represents about 850 mm
+        # we need to remap them to range 1.0 .. 0.0 for controlling volume
         mixer.voice[k].level=MAX_DIST-min(distances[k],MAX_DIST)
 
 # let's rock on
@@ -170,15 +170,20 @@ if not mixer.playing:
         mixer.voice[k].play(octaveNotes[k],loop=True)
         mixer.voice[k].level=0
 
-try:
-    print("mem_free",gc.mem_free())
+
+print("mem_free",gc.mem_free())
     
-    # Play voices updating volume levels
-    while True:
-        setKeyLevels()
-except Exception as e:
-    print("Exception",e)
-    for k in range(keyboard.getNumKeys()):
-        # silence the mixer
-        mixer.voice[k].level=0
+# Play voices updating volume levels
+while True:
+        try:
+            setKeyLevels()
+        except Exception as e:
+            print("Player Exception",e,"mem",gc.mem_free(),
+                  "resetting keyboard retrying")
+            keyboard.reset()
     
+for k in range(keyboard.getNumKeys()):
+    # silence the mixer
+    mixer.voice[k].level=0
+    
+
