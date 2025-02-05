@@ -1,10 +1,7 @@
 '''
-Player.py
+LoopPlayer.py
 The VL53_Keyboard consists of 10 VL53L0X sensors which are multiplexed and free running.
 The driver returns key values normalised to the range 0 .. 1.0
-
-1.0 represents the max distance 0.819m. In practice fingering the keyboard should
-produce values 0 .. 0.01
 
 
 Waveshare pico-audio
@@ -40,7 +37,7 @@ MAX_DIST=0.1 # scale is 0..1.0 # min..max
 
 HARMONICS=[1,2] # a list of harmonics to add e.g. [1,2,3,4] or [1,3,5]
 LOOPS=["Music/loop2.wav"] # add all the loop you want here
-LOOP_VOL=0.2
+LOOP_VOL=0.07
 
 # access to the keyboard (SDA,SCL and RST)
 
