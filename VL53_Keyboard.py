@@ -78,7 +78,7 @@ class Keyboard():
         if range>0:
             return round((value-self.minLevel[ch])/range,2)
         # (val-min)/range would be an infinite value
-        return self.maxLevel[ch]
+        return 1.0
         
     def getAllLevels(self):
         # read all the sensors and return a list of readings
@@ -87,15 +87,18 @@ class Keyboard():
         for ch in range(NUM_KEYS):
             
             if self.tsl[ch].data_ready:
-                norm=self.normalise(ch,self.tsl[ch].distance)
+                try:
+                    norm=self.normalise(ch,self.tsl[ch].distance)
                 
-                # there are glitches when the output is 90% less
-                # if that happens in one pass it's a glitch
-                if norm<0.1*levels[ch]:
-                    levels[ch]=self.cache[ch]
-                else:
-                    levels[ch]=norm
-                    self.cache[ch]=norm
+                    # there are glitches when the output is 90% less
+                    # if that happens in one pass it's a glitch
+                    if norm<0.1*levels[ch]:
+                        levels[ch]=self.cache[ch]
+                    else:
+                        levels[ch]=norm
+                        self.cache[ch]=norm
+                except:
+                    levels[ch]=self.cache[ch]        
             else:
                 # if there's no data ready used the last reading to
                 # smooth the changes
