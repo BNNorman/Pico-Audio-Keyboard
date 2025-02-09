@@ -70,6 +70,26 @@ LOOPS=["Music/loop2.wav"] # add all the loops you want here
 LOOP_VOL=0.2
 ```
 
+# MidiMixPlayer.py
+
+A rewrite of HarmonicPlayer.py using synthio generate the audio.
+
+It is also now possible to assign chords to the keys.
+
+```
+# one per key on the keybord
+# using 'natural' notes
+MIDI_NOTES=[makeChord(0,4), # "middle C"
+            makeChord(2,4),
+            makeChord(4,4),
+            makeChord(5,4),
+            makeChord(7,4),
+            makeChord(9,4),
+            makeChord(11,4),
+            makeChord(12,4),
+            ]
+```
+
 
 
 
